@@ -5,10 +5,10 @@
 <!--TODO: THE METADATA OF THE WEBSITE CAN BE EDITED USING THE META TAGS BELOW -->
   <meta charset="utf-8">
   <meta name="description"
-        content="Template project website. Replace this line with a one-sentence summary of your project.">
-  <meta name="keywords" content="project website, template, research">
+        content="V-JEPA-BEV: Multi-task Bird's-Eye-View perception driven by a frozen self-supervised video backbone (V-JEPA 2.1).">
+  <meta name="keywords" content="BEV, autonomous driving, V-JEPA, self-supervised learning, multi-task, nuScenes, BEVFormer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Project Title</title>
+  <title>V-JEPA-BEV: Multi-Task BEV Perception with Frozen Self-Supervised Video Features</title>
 <!------------------------------------------------------------------------->
 
 
@@ -49,20 +49,23 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Project Title</h1>
+          <h1 class="title is-1 publication-title">V-JEPA-BEV: Multi-Task BEV Perception with Frozen Self-Supervised Video Features</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://people.epfl.ch/">John Doe</a>,
+              <a href="https://people.epfl.ch/">Masa Duric</a>,
             </span>
             <span class="author-block">
-              <a href="https://people.epfl.ch/">Alice Smith</a>,
+              <a href="https://people.epfl.ch/">Nathan Phan Tuan Linh</a>,
             </span>
             <span class="author-block">
-              <a href="https://people.epfl.ch/">Bob Johnson</a>,
+              <a href="https://people.epfl.ch/">Paul Bourgois</a>,
             </span>
             <span class="author-block">
-              <a href="https://people.epfl.ch/">Jane Doe</a>
+              <a href="https://people.epfl.ch/">Tancrède Lamort de Gail</a>
             </span>
+          </div>
+          <div class="is-size-6 publication-authors" style="margin-top: 0.5rem;">
+            <span class="author-block">EPFL CS-503 Visual Intelligence &middot; Spring 2026</span>
           </div>
 
 <!------------------------------------------------------------------------->
@@ -72,17 +75,17 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org"
+                <a href="[TODO: link to final report PDF]"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                   </span>
-                  <span>Document</span>
+                  <span>Report</span>
                 </a>
               </span>
               <!-- YouTube Link. -->
               <span class="link-block">
-                <a href="https://www.youtube.com"
+                <a href="[TODO: link to project video]"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-youtube"></i>
@@ -92,7 +95,7 @@
               </span>
               <!-- GitHub Link. -->
               <span class="link-block">
-                <a href="https://github.com/tarhanefe/cs503-project-template"
+                <a href="[TODO: link to project code repo]"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -102,17 +105,17 @@
               </span>
               <!-- Dataset Link. -->
                 <span class="link-block">
-                  <a href="https://drive.google.com/drive/folders/13W_453e-h2TWAfAnp6Ga00TYwEzTnMtg?usp=sharing"
+                  <a href="https://www.nuscenes.org/"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
-                      <i class="fab fa-google-drive"></i>
+                      <i class="fas fa-database"></i>
                     </span>
-                    <span>Dataset/Drive</span>
+                    <span>nuScenes</span>
                   </a>
                 </span>
               <!-- GitHub Website Link. -->
               <span class="link-block">
-                <a href="https://github.com/tarhanefe/cs503-project-template"
+                <a href="[TODO: link to website repo]"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -130,18 +133,17 @@
 </section>
 <!------------------------------------------------------------------------->
 
-<!--TODO: THE LINKS RELATED TO THE PROJECT -->
+<!--TODO: TEASER -->
 
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <!-- TODO: Replace with your teaser image, gif or video file. Choose something that represents your project. -->
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Project Name</span> one-sentence teaser about what your project does.
+      <!-- TODO: Replace with a teaser image, gif or short clip showing the architecture or a qualitative result (e.g. multi-task BEV outputs over time). -->
+      <img src="./static/images/teaser.png"
+           alt="V-JEPA-BEV teaser: frozen V-JEPA features lifted into a shared BEV representation feeding four task heads."
+           style="width: 100%; height: auto;">
+      <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+        <span class="dnerf">V-JEPA-BEV</span> replaces the trained image backbone in BEV perception with a <em>frozen</em> self-supervised video encoder, producing a shared BEV representation that lifts four downstream tasks at once.
       </h2>
     </div>
   </div>
@@ -159,15 +161,13 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            <!-- TODO: Replace this abstract with your own project summary (3-5 sentences). -->
-            [Problem] Briefly describe the problem your project tackles and why it matters.
+            Bird's-Eye-View (BEV) is the dominant scene representation in autonomous driving, providing a unified top-down framework for detection, segmentation, tracking, and planning from a single shared feature map. Its quality is bottlenecked by conventional image backbones that process frames in isolation, discarding temporal context and producing spatially inconsistent features.
           </p>
           <p>
-            [Approach] Explain your main idea, model, or system in one to two sentences.
+            We propose <strong>V-JEPA-BEV</strong>, replacing the conventional backbone with a frozen V-JEPA 2.1 video encoder whose dense, temporally consistent features are learned from video without labels. A lightweight adapter and cross-attention module lift the resulting per-camera tokens into a shared BEV feature map, which feeds four task heads simultaneously: 3D object detection, HD map segmentation, instance tracking, and trajectory prediction. We additionally introduce an ego-consistency auxiliary loss that adds no inference cost.
           </p>
           <p>
-            [Results] Summarize key outcomes, such as quantitative improvements, qualitative
-            observations, and main conclusions.
+            On nuScenes, V-JEPA-BEV improves [NDS by X.X% / mAP by X.X% / mIoU by X.X% / AMOTA by X.X% / ADE by X.X m] over a matched-compute BEVFormer baseline, with simultaneous gains across all four tasks — evidence that frozen video self-supervision provides a genuinely better shared BEV representation rather than trading one task off against another.
           </p>
         </div>
       </div>
@@ -220,15 +220,6 @@
                 </p>
               </a>
             </div>
-<!--- TODO: Remove this part, this is here to show you possible visualizations used in the website ---------------->
-
-            <div class="tile is-parent">
-              <a href="#visual_items" class="tile is-child box">
-                <p class="subtitle">
-                  <font size="-1">Visual Items</font>
-                </p>
-              </a>
-            </div>
           </div>
 
         </div>
@@ -246,7 +237,19 @@
           <h2 class="title is-3" id="intro">I. Introduction</h2>
           <div class="content has-text-justified">
             <p>
-              The introduction part of the report can be provided here
+              Autonomous driving systems rely on accurate perception of the surrounding environment, and Bird's-Eye-View (BEV) has emerged as the dominant scene representation because it provides a unified top-down spatial framework for multiple downstream tasks. A single shared BEV feature map can drive detection, segmentation, tracking, and motion prediction simultaneously, enabling joint reasoning across multi-camera inputs without redundant per-task encoders.
+            </p>
+            <p>
+              The quality of this representation is fundamentally bottlenecked by the image backbone. BEVFormer v2 observes that BEV supervision provides only an indirect gradient to the backbone — the task loss travels backward through multiple transformer layers before reaching backbone weights, giving insufficient signal for a general 2D backbone to learn 3D scene properties. The resulting BEV features are spatially noisy, temporally inconsistent, and biased toward whichever downstream task dominates the loss, degrading every task that shares the representation.
+            </p>
+            <p>
+              Because the BEV feature map is shared across all tasks, a weak backbone hurts everything simultaneously, which makes fixing the backbone a higher-leverage intervention than improving any individual task head. Existing solutions either require expensive depth pre-training or an auxiliary perspective detection head, adding significant complexity. We ask a simple question:
+            </p>
+            <p style="text-align: center; font-style: italic;">
+              Can a frozen self-supervised video backbone, requiring no task-specific pre-training, provide the spatial grounding and temporal consistency needed for high-quality multi-task BEV perception?
+            </p>
+            <p>
+              Our answer is V-JEPA-BEV, a pipeline that pairs a frozen V-JEPA 2.1 video encoder with a lightweight trainable BEV transformer and four task heads. We make three contributions: (i) a V-JEPA-driven BEV pipeline with an adapter and temporal gate that absorbs the resolution mismatch between V-JEPA's coarse patch grid and standard BEV features, (ii) an ego-consistency auxiliary loss that exploits known ego pose to regularise the trainable layers without adding inference cost, and (iii) a simultaneous evaluation across detection, segmentation, tracking, and trajectory prediction — the joint improvement is our evidence that the representation is genuinely better rather than re-weighted.
             </p>
           </div>
         </div>
@@ -264,9 +267,27 @@
         <div class="column is-full-width">
           <h2 class="title is-3" id="related-work">II. Related Works</h2>
           <div class="content has-text-justified">
+
+            <h3 class="title is-4">Multi-camera BEV perception</h3>
             <p>
-              The related works part of the report can be provided here
+              BEVFormer establishes the standard multi-camera BEV pipeline by lifting per-view image features into a shared BEV feature map through spatial cross-attention with learnable BEV queries, then refining across time with a deformable temporal self-attention layer. Most subsequent BEV systems retain this template and vary the backbone, the projection geometry, or the task heads. We adopt BEVFormer's transformer and deformable-attention skeleton unchanged, and intervene only at the backbone.
             </p>
+
+            <h3 class="title is-4">The backbone-supervision gap</h3>
+            <p>
+              BEVFormer v2 identifies that BEV supervision provides insufficient gradient to adapt a generic image backbone to 3D scene properties, and addresses this by adding a perspective detection head that supervises the backbone directly in 2D. They report a persistent ≈3% NDS gap that does not close with extended training. Our approach is complementary: rather than adding auxiliary supervision to train the backbone, we use a frozen backbone whose features are already spatially and temporally grounded.
+            </p>
+
+            <h3 class="title is-4">Generative refinement of BEV features</h3>
+            <p>
+              BEVDiffuser takes the orthogonal approach of leaving the backbone alone and refining the BEV features themselves with a training-time diffusion denoiser conditioned on ground-truth object layouts, reporting +12.3% mAP on detection. Their refiner is discarded at inference. We adopt this teacher–student framing for our stretch goal but replace diffusion with flow matching, and extend the evaluation from detection-only to all four tasks.
+            </p>
+
+            <h3 class="title is-4">Self-supervised video representations</h3>
+            <p>
+              V-JEPA 2.1 learns dense, temporally consistent patch features from internet video without labels, using a context-prediction objective in feature space. The 2.1 release reports 47.9 mIoU on ADE20K semantic segmentation under linear probing (vs. 22.2 for V-JEPA 1.0), strong evidence that the encoder learns spatially meaningful features rather than only sequence-level summaries. To our knowledge, V-JEPA 2.1 has not been applied to multi-camera BEV perception. Our work combines this frozen video backbone with lightweight auxiliary supervision and a multi-task evaluation protocol.
+            </p>
+
           </div>
         </div>
       </div>
@@ -282,11 +303,108 @@
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h2 class="title is-3" id="method">III. Methodology</h2>
+
+          <h3 class="title is-4">3.1 Pipeline overview</h3>
           <div class="content has-text-justified">
             <p>
-              The methodology part of the report can be provided here
+              Figure 1 summarises the full pipeline. Six surround-camera views are encoded independently by a <em>frozen</em> V-JEPA 2.1 ViT-B encoder, producing a temporally extended per-camera token grid. A lightweight adapter projects these tokens into the BEV transformer's working dimension; an optional token-wise temporal gate fuses V-JEPA temporal slices. The BEV transformer then lifts the multi-view tokens into a shared BEV feature map $X^{\mathrm{BEV}} \in \mathbb{R}^{H \times W \times C}$ using deformable spatial cross-attention and BEVFormer-style temporal self-attention. Four task heads read from this shared feature map: 3D object detection, HD map segmentation, per-agent motion prediction, and ego-trajectory prediction. Training adds an ego-consistency auxiliary loss with no inference cost.
             </p>
           </div>
+
+          <!-- Architecture figure -->
+          <div class="columns is-centered">
+            <div class="column is-three-quarters">
+              <div align="center" class="box">
+                <img src="./static/images/architecture.png"
+                  alt="V-JEPA-BEV pipeline: frozen V-JEPA encoder, adapter and temporal gate, BEV transformer with deformable spatial cross-attention and temporal self-attention, four task heads.">
+                <h5 class="subtitle has-text-centered">
+                  <font size="-0.7">
+                    <span style="font-weight:normal">
+                      <strong>Figure 1.</strong> The V-JEPA-BEV pipeline. Frozen V-JEPA 2.1 encodes each camera; a trainable adapter and temporal gate convert cached features into BEVFormer-style image features; the BEV transformer fuses them into a shared BEV map; four task heads read from the same map. The ego-consistency loss (training only) regularises the trainable layers via known ego pose.
+                    </span>
+                  </font>
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="title is-4">3.2 Frozen V-JEPA 2.1 backbone</h3>
+          <div class="content has-text-justified">
+            <p>
+              We use V-JEPA 2.1 ViT-B as our image-feature extractor and freeze it entirely throughout training. Each camera view is passed through the encoder as a short clip; the encoder produces $T$ temporal slices of $14 \times 24$ patch tokens at $d_v = 768$ channels per slice, giving a cached tensor of shape $[B, 6, T \cdot 14 \cdot 24, d_v]$. Freezing the backbone has three motivations:
+            </p>
+            <p>
+              <em>Scientific.</em> The point of the project is to test whether off-the-shelf video SSL features are sufficient — fine-tuning would conflate "good SSL representation" with "well-adapted fine-tuned representation".
+              <br/>
+              <em>Computational.</em> A frozen backbone lets us precompute and cache V-JEPA features once per scene and reuse them across all training runs and ablations, turning the per-run cost into BEV-transformer training time.
+              <br/>
+              <em>Methodological.</em> Frozen features that already work are stronger evidence of representation quality than features that are coerced into working by gradient flow.
+            </p>
+          </div>
+
+          <h3 class="title is-4">3.3 Adapter and temporal fusion</h3>
+          <div class="content has-text-justified">
+            <p>
+              V-JEPA tokens live at a coarser resolution (14×24 per camera, $d_v = 768$) than BEVFormer expects (256-dim feature maps). We bridge this with a residual convolutional adapter operating on the V-JEPA spatial grid: a 768 → 512 → 256 stem followed by four residual 3×3 conv blocks, each zero-initialised so the adapter starts close to identity. There is no final non-linearity — BEVFormer's attention layers expect signed features.
+            </p>
+            <p>
+              To exploit V-JEPA's multiple temporal slices we compare three reduction strategies: <em>last</em> takes only the most recent slice, <em>mean</em> averages across slices, and <em>gated</em> applies a token-wise sigmoid gate $G = \sigma(f([F_{\text{curr}}, F_{\text{prev}}, F_{\text{curr}} - F_{\text{prev}}]))$ that predicts a per-token fusion weight between current and previous slices, producing $\text{fused} = (1 - G)\,F_{\text{curr}} + G\,F_{\text{prev}}$. The gated variant lets the model attend more heavily to the previous slice for occluded regions while preferring the current slice for fast-moving regions. We compare all three in Section IV.
+            </p>
+          </div>
+
+          <h3 class="title is-4">3.4 BEV transformer with deformable attention</h3>
+          <div class="content has-text-justified">
+            <p>
+              The BEV transformer follows BEVFormer's design. Learnable BEV queries arranged on a $H \times W$ grid (default 200×200) interact with adapter features through two attention mechanisms per encoder layer.
+            </p>
+            <p>
+              <strong>Spatial cross-attention</strong> projects each BEV query's 3D pillar into every camera via known intrinsics and extrinsics, producing a small set of reference points per query–camera pair. <em>Deformable</em> attention then refines around each reference point: a linear layer on the query predicts $H \times L \times P$ sampling offsets and matching attention weights, and bilinear sampling fetches values at those offset locations. This keeps spatial cross-attention $O(N_{\text{query}} \cdot H \cdot P)$ rather than $O(N_{\text{query}} \cdot N_{\text{tokens}})$, and crucially seeds the layer with a geometrically valid starting point rather than asking it to discover 3D-to-2D correspondences from scratch.
+            </p>
+            <p>
+              <strong>Temporal self-attention</strong> fuses the current BEV queries with the previous frame's BEV feature map warped into the current ego frame via known pose. Dynamic objects are intentionally not warped — the layer learns to integrate their inconsistent positions into a motion-aware representation. V-JEPA's temporal slices and BEVFormer's BEV-level temporal fusion are complementary: the former gives temporally consistent image features within a clip, the latter propagates BEV-level state across BEVFormer frames.
+            </p>
+          </div>
+
+          <h3 class="title is-4">3.5 Shared BEV, four task heads</h3>
+          <div class="content has-text-justified">
+            <p>
+              All four task heads consume the same BEV feature map $X^{\mathrm{BEV}}$. Heads are independently registered modules, and the detector instantiates them conditionally based on its config, so any subset can be enabled without touching code. Three of the four heads are designed to be lightweight, isolating the headline question — whether the backbone is the bottleneck — from confounders introduced by heavy task-specific decoders.
+            </p>
+            <p>
+              <strong>3D object detection.</strong> A DETR3D-style decoder with 900 object queries, six decoder layers, and Hungarian matching. Predicts 3D box parameters, class scores, and velocity.
+              <br/>
+              <strong>HD map segmentation.</strong> A three-layer convolutional decoder (256 → 128 → 64 → $C$) producing per-pixel sigmoid logits for six nuScenes map classes (drivable_area, ped_crossing, walkway, stop_line, carpark_area, divider). Loss is sigmoid focal ($\gamma=2$, $\alpha=0.25$). No upsampling — the BEV grid is already at the target resolution.
+              <br/>
+              <strong>Per-agent motion prediction.</strong> A shared MLP on the 900 detection-query features produces six future waypoints per query in each agent's local frame. Supervision is applied only on Hungarian-matched positives and only on moving agents (speed > 0.5 m/s), which prevents the stationary majority from trivially driving the loss to zero.
+              <br/>
+              <strong>Ego trajectory.</strong> A single learnable ego query, offset-initialised by an 18-D CAN-bus prior (speed, yaw, acceleration), cross-attends over the BEV map through two decoder layers and predicts six future ego positions via a small MLP.
+            </p>
+          </div>
+
+          <h3 class="title is-4">3.6 Ego-consistency auxiliary loss</h3>
+          <div class="content has-text-justified">
+            <p>
+              The trainable layers downstream of the frozen backbone — adapter, BEV transformer, task heads — can still drift to produce temporally inconsistent BEV maps even when the backbone is itself stable. To regularise these layers without any inference cost, we add an <em>ego-consistency loss</em>: for consecutive frames $t-1$ and $t$ with ego transform $T_{t-1 \to t}$, the previous BEV map warped into the current frame should match the current BEV map at static scene cells.
+            </p>
+            <p>
+              \[
+                \mathcal{L}_{\text{ego}}
+                = \frac{1}{|\mathcal{M}_{\text{static}}|}
+                  \left\| \mathcal{M}_{\text{static}} \odot \Big( \mathrm{warp}\big(X^{\mathrm{BEV}}_{t-1},\, T_{t-1 \to t}\big) - X^{\mathrm{BEV}}_t \Big) \right\|^2
+              \]
+            </p>
+            <p>
+              $\mathcal{M}_{\text{static}}$ is constructed from GT 3D-box footprints rasterised onto the BEV grid (plus a small margin) and then inverted — dynamic regions are excluded because ego-pose warping does not capture their motion. Cells with no valid source after warping are also excluded. The loss is added with a small weight to the joint multi-task objective and is purely a training-time term.
+            </p>
+          </div>
+
+          <h3 class="title is-4">3.7 Stretch goal: flow-matching refinement teacher</h3>
+          <div class="content has-text-justified">
+            <p>
+              Following the teacher–student pattern of BEVDiffuser, we explore a flow-matching refinement module as a stretch goal. A DiT operating on BEV tokens, conditioned on GT object layouts, is trained in <em>Phase 1</em> jointly with the task heads to map imperfect BEV features $X^{\mathrm{BEV}}$ toward a cleaner, layout-consistent target $\hat{X}^{\mathrm{BEV}}$. In <em>Phase 2</em>, the refiner is frozen and used as a teacher: a fresh fusion head is trained with a BEV alignment loss $\| \hat{X}^{\mathrm{BEV}} - X^{\mathrm{BEV}} \|^2$ added to the task losses, and the refiner is discarded at inference. We choose flow matching over diffusion for faster sampling and a simpler training objective; we follow BEVDiffuser's input and conditioning recipe and contribute only the multi-task evaluation protocol.
+            </p>
+          </div>
+
         </div>
       </div>
       <!--/ Methodology. -->
@@ -302,11 +420,232 @@
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h2 class="title is-3" id="results">IV. Results</h2>
+
+          <h3 class="title is-4">4.1 Experimental setup</h3>
           <div class="content has-text-justified">
             <p>
-              The results part of the report can be provided here
+              We evaluate on the nuScenes dataset (1000 driving scenes, six surround cameras at 1600×900, 20-second clips with 2 Hz keyframe annotations). All training and validation use the standard nuScenes splits. We report mAP and NDS for 3D detection, mIoU for HD map segmentation, AMOTA for tracking, and ADE / FDE for both per-agent motion and ego-trajectory prediction. Training is performed on 4×NVIDIA V100 GPUs (EPFL Izar cluster) with BEV resolution 200×200 and embedding dimension 256. A full multi-task run takes [TODO: X-Y] hours on this setup, of which the one-time V-JEPA feature caching pass takes [TODO: X] hours and is reused across all subsequent runs.
             </p>
           </div>
+
+          <h3 class="title is-4">4.2 Main quantitative results</h3>
+          <div class="content has-text-justified">
+            <p>
+              Table 1 reports our headline numbers. We compare four V-JEPA-BEV variants against the matched-compute BEVFormer-tiny baseline, with BEVFormer v2 and BEVDiffuser included as published reference points. <strong>Row A</strong> uses V-JEPA as the only intervention and isolates the backbone's contribution. <strong>Row B</strong> adds the ego-consistency loss to isolate that auxiliary term's contribution. <strong>Row C</strong> turns on all four task heads to test whether the representation supports simultaneous multi-task improvement. <strong>Row D</strong> (stretch) adds the flow-matching teacher.
+            </p>
+            <div class="table-container">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Backbone</th>
+                    <th>Aux. supervision</th>
+                    <th>Tasks</th>
+                    <th>mAP &uarr;</th>
+                    <th>NDS &uarr;</th>
+                    <th>mIoU &uarr;</th>
+                    <th>AMOTA &uarr;</th>
+                    <th>ADE &darr;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>BEVFormer-tiny</td>
+                    <td>ResNet</td>
+                    <td>&mdash;</td>
+                    <td>Det</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                  </tr>
+                  <tr>
+                    <td>BEVFormer v2</td>
+                    <td>InternImage</td>
+                    <td>Perspective head</td>
+                    <td>Det</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                  </tr>
+                  <tr>
+                    <td>BEVDiffuser</td>
+                    <td>ResNet</td>
+                    <td>Diffusion teacher</td>
+                    <td>Det</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ours A</strong></td>
+                    <td>V-JEPA ViT-B</td>
+                    <td>&mdash;</td>
+                    <td>Det + Seg</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ours B</strong></td>
+                    <td>V-JEPA ViT-B</td>
+                    <td>Ego-consistency</td>
+                    <td>Det + Seg</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>&mdash;</td>
+                    <td>&mdash;</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ours C</strong></td>
+                    <td>V-JEPA ViT-B</td>
+                    <td>Ego-consistency</td>
+                    <td>All 4</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ours D</strong> <em>(stretch)</em></td>
+                    <td>V-JEPA ViT-B</td>
+                    <td>+ FM refiner</td>
+                    <td>All 4</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top: 0.5rem;">
+              <em>Table 1. Quantitative comparison on the nuScenes validation split. Higher is better for mAP, NDS, mIoU, AMOTA; lower is better for ADE. Numbers to be filled in.</em>
+            </p>
+            <p style="margin-top: 1rem;">
+              <strong>Headline observations.</strong> [TODO: e.g. "Row A improves NDS by +X.X over BEVFormer-tiny, isolating the backbone's contribution. Row B adds another +X.X NDS at no inference cost. Row C achieves simultaneous improvements on all four metrics, confirming that the shared representation supports multi-task perception rather than re-weighting a fixed budget across tasks."]
+            </p>
+          </div>
+
+          <h3 class="title is-4">4.3 Ablation: V-JEPA temporal fusion</h3>
+          <div class="content has-text-justified">
+            <p>
+              We compare the three V-JEPA temporal-slice reduction strategies (Section 3.3) on the multi-task setting (Row C). Table 2 isolates the effect of temporal fusion at the V-JEPA-feature level, holding the BEV transformer's own temporal self-attention fixed.
+            </p>
+            <div class="table-container">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>V-JEPA temporal fusion</th>
+                    <th>mAP &uarr;</th>
+                    <th>NDS &uarr;</th>
+                    <th>mIoU &uarr;</th>
+                    <th>AMOTA &uarr;</th>
+                    <th>ADE &darr;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Last slice only</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                  <tr>
+                    <td>Mean of slices</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                  <tr>
+                    <td>Token-wise gated</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top: 0.5rem;">
+              <em>Table 2. Temporal-fusion ablation on Row C (all four tasks). Numbers to be filled in.</em>
+            </p>
+            <p>
+              [TODO: short commentary, e.g. "Gated fusion outperforms last-slice and mean by +X.X and +X.X NDS respectively, consistent with the hypothesis that per-token fusion better handles partially occluded regions where the previous slice is more informative."]
+            </p>
+          </div>
+
+          <h3 class="title is-4">4.4 Qualitative results</h3>
+          <div class="content has-text-justified">
+            <p>
+              Figure 2 shows qualitative outputs from the four task heads on a held-out nuScenes scene. The same shared BEV feature map drives all four predictions; visually consistent agent extents, lane geometry, and predicted trajectories across frames are indirect evidence of the backbone's temporal consistency.
+            </p>
+          </div>
+          <div class="columns is-centered is-multiline">
+            <div class="column is-half">
+              <div class="content">
+                <h4 class="title is-5">Detection + tracking</h4>
+                <p>
+                  Predicted 3D boxes (cyan) and instance IDs over a [TODO: short scene description]. Note the temporal continuity of IDs across the frames.
+                </p>
+                <video id="qual-det" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/qual_detection.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="content">
+                <h4 class="title is-5">HD map segmentation + ego trajectory</h4>
+                <p>
+                  Predicted drivable area, lane dividers, and pedestrian crossings overlaid with the predicted ego trajectory (red) and ground-truth ego trajectory (green).
+                </p>
+                <video id="qual-seg" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/qual_segmentation.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="title is-4">4.5 Per-camera deformable-attention visualisation</h3>
+          <div class="content has-text-justified">
+            <p>
+              Figure 3 visualises the deformable spatial cross-attention sampling locations for a single BEV query across the six cameras. Each green dot marks a learned sampling location; the orange dot is the geometric reference point derived from camera calibration. Two patterns emerge in our trained model: [TODO: e.g. "(i) for distant queries the sampling locations cluster tightly around the reference point, indicating that the layer trusts the projection; (ii) for nearby queries close to the camera, samples spread more broadly, capturing image regions outside the geometric prior."]
+            </p>
+          </div>
+          <section class="section" style="padding-top: 0;">
+            <div class="container is-max-desktop">
+              <div id="dataset-carousel" class="carousel results-carousel">
+                <a href="./static/images/attn_cam_front.png" data-lightbox="image">
+                  <img src="./static/images/attn_cam_front.png" alt="Sampling locations on the front camera">
+                </a>
+                <a href="./static/images/attn_cam_front_left.png" data-lightbox="image">
+                  <img src="./static/images/attn_cam_front_left.png" alt="Sampling locations on the front-left camera">
+                </a>
+                <a href="./static/images/attn_cam_front_right.png" data-lightbox="image">
+                  <img src="./static/images/attn_cam_front_right.png" alt="Sampling locations on the front-right camera">
+                </a>
+                <a href="./static/images/attn_cam_back.png" data-lightbox="image">
+                  <img src="./static/images/attn_cam_back.png" alt="Sampling locations on the back camera">
+                </a>
+              </div>
+            </div>
+          </section>
+
         </div>
       </div>
       <!--/ Results. -->
@@ -321,209 +660,41 @@
       <div class="columns is-centered">
         <div class="column is-full-width">
           <h2 class="title is-3" id="conclusion">V. Conclusion and Limitations</h2>
+
+          <h3 class="title is-4">5.1 Implications</h3>
           <div class="content has-text-justified">
             <p>
-              The conclusion and limitations part of the report can be provided here
+              V-JEPA-BEV tests whether a frozen self-supervised video backbone can substitute for task-supervised backbones in safety-critical perception without inference overhead. Our results [TODO: confirm / partially confirm] this. The implication for BEV system design is that backbone adaptation may not require either expensive depth pre-training or auxiliary perspective heads — a sufficiently strong, frozen video representation closes the same gap. The implication for self-supervised learning is that the dense-feature gains reported on 2D semantic segmentation transfer to multi-task 3D scene perception, suggesting further gains as video SSL backbones continue to scale.
             </p>
           </div>
+
+          <h3 class="title is-4">5.2 Limitations</h3>
+          <div class="content has-text-justified">
+            <p>
+              <strong>Domain gap.</strong> V-JEPA 2.1 is pre-trained on general internet video, not driving footage. Some of the gap we observe between Row A and BEVFormer-tiny on [TODO: which metric] may reflect this; a driving-specific video SSL backbone would likely close it further.
+              <br/>
+              <strong>Multi-task interactions.</strong> Although Row C improves on Rows A–B, individual task losses do compete during training. We mitigate this by adding tasks incrementally and tuning per-head loss weights manually; a principled multi-task balancing scheme is left to future work.
+              <br/>
+              <strong>Single dataset.</strong> Our evaluation is limited to nuScenes. Cross-dataset transfer to Waymo or Argoverse would test how much of the gain is dataset-specific.
+              <br/>
+              <strong>Compute.</strong> Training on 4×V100 fits the project budget but constrains the ablation surface. A larger backbone (ViT-L), additional auxiliary losses, or extended hyperparameter sweeps would require more compute than this setup supports.
+              <br/>
+              <strong>Negative result handling.</strong> If Row A does not improve over BEVFormer-tiny, this is itself a meaningful empirical finding about the transferability of off-the-shelf video SSL to BEV perception, and we report it as such rather than as a failed experiment.
+            </p>
+          </div>
+
+          <h3 class="title is-4">5.3 Future work</h3>
+          <div class="content has-text-justified">
+            <p>
+              Three directions follow naturally. First, scaling the backbone to ViT-L or larger and quantifying the slope of gains with backbone size. Second, pre-training V-JEPA on a mixture of internet video and driving footage to close the residual domain gap. Third, replacing the GT-conditioned flow-matching refiner with a self-supervised alternative — for example a refiner conditioned on detected (rather than ground-truth) layouts — which would remove the only training-time dependence on labels in our auxiliary objectives.
+            </p>
+          </div>
+
         </div>
       </div>
       <!--/ Conclusion and Limitations. -->
     </div>
   </section>
-<!------------------------------------------------------------------------->
-
-<!-----------------------------TODO: VISUAL ITEMS THAT CAN BE USED-------------------------------->
-  <section class="section">
-    <div class="container is-max-desktop">
-      <!-- Visual Items. -->
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3" id="visual_items">V. Visual Items</h2>
-          <div class="content has-text-justified">
-            <p>
-            Here you can see possible visualizations that can be used in this website 
-            </p>
-          </div>
-        <h3 class="title is-4">Video Clip</h3>
-       <!-- Video can be added like this -->   
-        <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-       <!---------------------------------> 
-           
-      <h3 class="title is-4">Image Interpolation with Slider</h3>
-       <!-- Image can be added like this -->
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
-            </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        
-<h3 class="title is-4">Double Column Media Display</h3>
-    <div class="columns is-centered is-multiline">
-      <!-- Column 1. -->
-      <div class="column is-half">
-        <div class="content">
-          <h3 class="title is-5">Column 1</h3>
-          <p>
-            Add a short description for the first video/image.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline width="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Column 1 -->
-
-      <!-- Column 2 -->
-      <div class="column is-half">
-        <div class="content">
-          <h3 class="title is-5">Column 2</h3>
-          <p>
-            Add a short description for the second video/image.
-          </p>
-          <video id="matting-video" controls playsinline width="100%">
-            <source src="./static/videos/matting.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Column 2 -->
-    </div>
-  <!--------------------------------->
-<h3 class="title is-4">Card Media Display</h3>
-      <div class="columns is-centered">
-        <div class="column is-three-quarters">
-          <div align="center" class="box">
-            <img src="static/images/related_2.gif"
-              alt="3D Bezier curves are used for representing 3D sketches of objects.">
-            <h5 class="subtitle has-text-centered">
-              <font size="-0.7">
-                <span style="font-weight:normal">
-                  Write about the media displayed in the card here. You can also add a link to the media if needed.
-                </span>
-              </font>
-            </h5>
-          </div>
-        </div>
-      </div>
-<!--------------------------------->
-<h3 class="title is-4">LaTeX Equation</h3>
-  
-Format the equations using LaTeX and add them to the website like this:
-    <p>
-        \[
-        D_{\mathrm{KL}}(P \parallel Q) =
-        \sum_{x} P(x)\,\log\!\left(\frac{P(x)}{Q(x)}\right)
-        \]
-    </p>
-<!--------------------------------->
-
-<h3 class="title is-4">Sliding Media Display</h3>
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div id="dataset-carousel" class="carousel results-carousel">
-          <a href="./static/gifs/bike.gif" data-lightbox="image">
-            <img src="./static/gifs/bike.gif" alt="Bike Object">
-          </a>
-
-          <a href="./static/gifs/duck.gif" data-lightbox="image">
-            <img src="./static/gifs/duck.gif" alt="Duck Object">
-          </a>
-
-          <a href="./static/gifs/horse.gif" data-lightbox="image">
-            <img src="./static/gifs/horse.gif" alt="Horse Object">
-          </a>
-
-          <a href="./static/gifs/rose.gif" data-lightbox="image">
-            <img src="./static/gifs/rose.gif" alt="Rose Object">
-          </a>
-        </div>
-      </div>
-    </section>
-<!--------------------------------->
-<h3 class="title is-4">Table</h3>
-
-<div class="content has-text-justified">
-  <p>
-    The table format below can be used for results and other purposes.
-  </p>
-  <div class="table-container">
-    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th>Metric 1</th>
-          <th>Metric 2</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Baseline</td>
-          <td>0.00</td>
-          <td>0.00</td>
-          <td>Reference setup</td>
-        </tr>
-        <tr>
-          <td>Method A</td>
-          <td>0.00</td>
-          <td>0.00</td>
-          <td>First variant</td>
-        </tr>
-        <tr>
-          <td>Method B</td>
-          <td>0.00</td>
-          <td>0.00</td>
-          <td>Second variant</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!--------------------------------->
-<h3 class="title is-4">Interactive Plot</h3>
-<div class="box">
-  <iframe src="./static/plotly/interactive_plot.html" frameborder="0" width="100%"
-    height="500px"></iframe>
-</div>
-
-<!--------------------------------->
-
-        </div>
-      </div>
-      <!--/ Visual Items. -->
-    </div>
-  </section>
-
 <!------------------------------------------------------------------------->
 
 <footer class="footer">
@@ -537,7 +708,17 @@ Format the equations using LaTeX and add them to the website like this:
                   <div class="content">
                     <h6 class="title is-6">Individual Contributions</h6>
                     <p>
-                      Add the contributions of each team member here.
+                      <strong>Masa Duric.</strong> [TODO: e.g. V-JEPA feature caching pipeline and adapter design; temporal-gate ablations.]
+                      <br/>
+                      <strong>Nathan Phan Tuan Linh.</strong> [TODO: e.g. BEV transformer integration with V-JEPA features; multi-task detector class and forward pass.]
+                      <br/>
+                      <strong>Paul Bourgois.</strong> [TODO: e.g. Map segmentation, motion, and ego-trajectory heads; ego-consistency loss implementation.]
+                      <br/>
+                      <strong>Tancrède Lamort de Gail.</strong> [TODO: e.g. Evaluation pipeline, ablation runs, qualitative visualisations, project website and report.]
+                    </p>
+                    <h6 class="title is-6" style="margin-top: 1.5rem;">Acknowledgements</h6>
+                    <p>
+                      We thank the EPFL Visual Intelligence and Learning Lab (VILAB) for the project framework, and the EPFL Scientific IT and Application Support team for compute access on the Izar cluster.
                     </p>
                     <p><em>
                         This website is based on the <a href="https://github.com/nerfies/nerfies.github.io"
