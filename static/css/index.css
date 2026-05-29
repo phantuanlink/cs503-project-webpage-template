@@ -185,6 +185,10 @@ body {
   width: 100%;
 }
 
+.detection-ego-image {
+  max-width: 78%;
+}
+
 .video-frame-slider {
   display: block;
   width: 100%;
