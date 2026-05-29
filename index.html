@@ -83,7 +83,7 @@
                   <span>Report</span>
                 </a>
               </span>
-              <!-- YouTube Link. -->
+              <!-- YouTube Link.
               <span class="link-block">
                 <a href="[TODO: link to project video]"
                    class="external-link button is-normal is-rounded is-dark">
@@ -92,7 +92,7 @@
                   </span>
                   <span>Video</span>
                 </a>
-              </span>
+              </span> -->
               <!-- GitHub Link. -->
               <span class="link-block">
                 <a href="https://github.com/masadj415/BEVFormer"
@@ -130,12 +130,18 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <!-- TODO: Replace with a teaser image, gif or short clip showing the architecture or a qualitative result (e.g. multi-task BEV outputs over time). -->
-      <img src="./static/images/teaser.png"
+      <!-- <img src="./static/images/teaser.png"
            alt="V-JEPA-BEV teaser: frozen V-JEPA features lifted into a shared BEV representation feeding four task heads."
-           style="width: 100%; height: auto;">
-      <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
-        <span class="dnerf">V-JEPA-BEV</span> asks a simple question: for multi-task BEV perception, does temporal video understanding (V-JEPA 2.1) help more than strong spatial understanding (DINOv3) when the backbone is <em>frozen</em>?
-      </h2>
+           style="width: 100%; height: auto;"> -->
+      <div class="research-question">
+        <p class="question-label">Research Question</p>
+        <h2>
+          For multi-task BEV perception, what matters more: temporal video understanding or strong spatial representation?
+        </h2>
+        <p>
+          We compare frozen <strong>V-JEPA 2.1</strong> and <strong>DINOv3</strong> backbones inside the same BEVFormer-style pipeline.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -150,13 +156,13 @@
           <img src="./static/gifs/dino_scene481_thr035_preview.gif"
             alt="V-JEPA-BEV qualitative preview on a nuScenes scene."
             style="width: 100%; height: auto;">
-          <h5 class="subtitle has-text-centered">
+          <!-- <h5 class="subtitle has-text-centered">
             <font size="-0.7">
               <span style="font-weight:normal">
                 Qualitative preview of V-JEPA-BEV predictions on a held-out nuScenes scene.
               </span>
             </font>
-          </h5>
+          </h5> -->
         </div>
       </div>
     </div>
@@ -194,7 +200,7 @@
         <div class="column is-four-fifths">
 
           <h2 class="title is-3">Overview</h2>
-          <div class="tile is-ancestor is-centered" style="vertical-align: middle;">
+          <div class="tile is-ancestor is-centered overview-links" style="vertical-align: middle;">
             <div class="tile is-parent">
               <a href="#intro" class="tile is-child box">
                 <p class="subtitle">
@@ -317,7 +323,7 @@
               <strong>BEVFormer</strong> uses BEV queries that interact with multi-camera features via deformable spatial cross-attention and temporal self-attention, reaching 51.7% NDS on nuScenes with an R101-DCN backbone. <strong>BEVFormer v2</strong> adds perspective 3D supervision, letting modern ViT backbones match or exceed ResNet variants. <strong>Lift-Splat-Shoot</strong> and BEVDepth use explicit depth prediction; <strong>BEVFusion</strong> combines camera and LiDAR streams.
             </p>
 
-            <div class="columns is-centered is-multiline">
+            <!-- <div class="columns is-centered is-multiline">
               <div class="column is-full">
                 <div class="content has-text-centered">
                   <img src="./static/gifs/bevfusion.gif" alt="BEVFusion related-work overview." style="width: 100%; height: auto;">
@@ -330,7 +336,7 @@
                   <p><strong>Lift-Splat-style methods.</strong> Explicit depth lifting followed by BEV splatting.</p>
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <h3 class="title is-4">Visual foundation models</h3>
             <p>
@@ -463,6 +469,28 @@
               </video>
               <input id="vjepa-video-slider" class="video-frame-slider" type="range" min="0" max="0" value="0" step="0.033" data-video-target="vjepa-video">
               <p class="has-text-centered is-size-7">V-JEPA qualitative output. Drag the slider to scrub frame by frame.</p>
+            </div>
+          </div>
+
+          <div class="box interactive-panel wide-figure" id="bev-map-comparison">
+            <h4 class="title is-5">BEV map comparison</h4>
+            <div class="buttons are-small is-centered">
+              <button class="button is-dark is-rounded bev-map-button is-active" data-map="dino">DINOv3 vs BEVFormer</button>
+              <button class="button is-rounded bev-map-button" data-map="vjepa">V-JEPA vs BEVFormer</button>
+            </div>
+            <div class="columns is-centered is-multiline">
+              <div class="column is-half">
+                <div class="content has-text-centered">
+                  <img id="bev-map-model-image" src="./static/images/bevmap_dino_compare.png" alt="DINOv3 BEV map qualitative output." style="width: 100%; height: auto;">
+                  <p id="bev-map-model-caption"><strong>DINOv3.</strong> BEV map prediction with spatially pretrained frozen features.</p>
+                </div>
+              </div>
+              <div class="column is-half">
+                <div class="content has-text-centered">
+                  <img id="bev-map-bevformer-image" src="./static/images/bevmap_bevformer_dino_compare.png" alt="BEVFormer BEV map qualitative output." style="width: 100%; height: auto;">
+                  <p id="bev-map-bevformer-caption"><strong>BEVFormer.</strong> Baseline BEV map prediction on the same DINOv3 comparison scene.</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -599,7 +627,7 @@
             </p>
           </div>
 
-          <div class="box interactive-panel" id="ablation-explorer">
+          <!-- <div class="box interactive-panel" id="ablation-explorer">
             <h4 class="title is-5">Interactive ablation explorer</h4>
             <div class="buttons are-small">
               <button class="button is-dark is-rounded ablation-button is-active" data-config="vjepa-best">V-JEPA best</button>
@@ -628,7 +656,7 @@
             </div>
             <progress class="progress is-info" id="ablation-progress" value="83.5" max="100">83.5%</progress>
             <p class="has-text-centered is-size-7" id="ablation-progress-caption">83.5% of the BEVFormer reference NDS at 43% of its latency.</p>
-          </div>
+          </div> -->
 
           <div class="columns is-centered">
             <div class="column is-three-quarters">
@@ -674,28 +702,6 @@
             <p>
               <strong>Design principle.</strong> For camera-only BEV perception, BEV-level temporal modelling is not optional. Regardless of how rich the backbone features are, single-frame BEV projection is fundamentally underdetermined for dynamic-attribute estimation. The BEV temporal attention module, despite being a small component of the overall architecture, carries disproportionate responsibility for velocity and orientation.
             </p>
-          </div>
-
-          <div class="box interactive-panel wide-figure" id="bev-map-comparison">
-            <h4 class="title is-5">BEV map comparison</h4>
-            <div class="buttons are-small is-centered">
-              <button class="button is-dark is-rounded bev-map-button is-active" data-map="dino">DINOv3 vs BEVFormer</button>
-              <button class="button is-rounded bev-map-button" data-map="vjepa">V-JEPA vs BEVFormer</button>
-            </div>
-            <div class="columns is-centered is-multiline">
-              <div class="column is-half">
-                <div class="content has-text-centered">
-                  <img id="bev-map-model-image" src="./static/images/bevmap_dino_compare.png" alt="DINOv3 BEV map qualitative output." style="width: 100%; height: auto;">
-                  <p id="bev-map-model-caption"><strong>DINOv3.</strong> BEV map prediction with spatially pretrained frozen features.</p>
-                </div>
-              </div>
-              <div class="column is-half">
-                <div class="content has-text-centered">
-                  <img id="bev-map-bevformer-image" src="./static/images/bevmap_bevformer_dino_compare.png" alt="BEVFormer BEV map qualitative output." style="width: 100%; height: auto;">
-                  <p id="bev-map-bevformer-caption"><strong>BEVFormer.</strong> Baseline BEV map prediction on the same DINOv3 comparison scene.</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           <h3 class="title is-4">4.5 Multi-task learning analysis</h3>
@@ -762,7 +768,7 @@
             </font>
           </h5>
 
-          <h3 class="title is-4">4.6 Side-by-side detection comparison</h3>
+          <!-- <h3 class="title is-4">4.6 Side-by-side detection comparison</h3>
           <div class="content has-text-justified">
             <p>
               The clips below compare detection output from our best frozen-backbone model (V-JEPA-BEV) and the BEVFormer R101-DCN reference on a held-out nuScenes scene. Both models receive the same six surround-camera inputs and predict 3D bounding boxes overlaid on the BEV plane. [TODO: short commentary tying to the quantitative gap.]
@@ -816,7 +822,7 @@
                 </a>
               </div>
             </div>
-          </section>
+          </section> -->
 
         </div>
       </div>
@@ -966,6 +972,5 @@
               </div>
             </div>
           </footer>
-
 </body>
 </html>
