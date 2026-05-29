@@ -155,3 +155,43 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+.interactive-panel {
+  margin-top: 1.5rem;
+}
+
+.interactive-panel .button.is-active {
+  background-color: #363636;
+  border-color: #363636;
+  color: #fff;
+}
+
+.wide-figure {
+  width: min(1180px, 96vw);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+.multitask-pane.is-hidden-view {
+  display: none;
+}
+
+.is-hidden-view {
+  display: none;
+}
+
+#multitask-outputs .multitask-pane.is-full {
+  flex: none;
+  width: 100%;
+}
+
+.detection-ego-image {
+  max-width: 78%;
+}
+
+.video-frame-slider {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  accent-color: #363636;
+}
