@@ -5,8 +5,8 @@
 <!--TODO: THE METADATA OF THE WEBSITE CAN BE EDITED USING THE META TAGS BELOW -->
   <meta charset="utf-8">
   <meta name="description"
-        content="V-JEPA-BEV: Multi-task Bird's-Eye-View perception driven by a frozen self-supervised video backbone (V-JEPA 2.1).">
-  <meta name="keywords" content="BEV, autonomous driving, V-JEPA, self-supervised learning, multi-task, nuScenes, BEVFormer">
+        content="V-JEPA-BEV: a study of frozen self-supervised backbones for multi-task BEV perception, asking whether temporal (V-JEPA 2.1) or spatial (DINOv3) understanding matters more.">
+  <meta name="keywords" content="BEV, autonomous driving, V-JEPA, DINOv3, self-supervised learning, multi-task, nuScenes, BEVFormer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>V-JEPA-BEV: Multi-Task BEV Perception with Frozen Self-Supervised Video Features</title>
 <!------------------------------------------------------------------------->
@@ -55,7 +55,7 @@
               <a href="https://people.epfl.ch/">Masa Duric</a>,
             </span>
             <span class="author-block">
-              <a href="https://people.epfl.ch/">Nathan Phan Tuan Linh</a>,
+              <a href="https://www.linkedin.com/in/nathan-phan-tuan-linh/">Nathan Phan Tuan Linh</a>,
             </span>
             <span class="author-block">
               <a href="https://people.epfl.ch/">Paul Bourgois</a>,
@@ -95,7 +95,7 @@
               </span>
               <!-- GitHub Link. -->
               <span class="link-block">
-                <a href="[TODO: link to project code repo]"
+                <a href="https://github.com/masadj415/BEVFormer"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -113,16 +113,7 @@
                     <span>nuScenes</span>
                   </a>
                 </span>
-              <!-- GitHub Website Link. -->
-              <span class="link-block">
-                <a href="[TODO: link to website repo]"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Website Code</span>
-                  </a>
-              </span>
+
             </div>
 
           </div>
@@ -143,7 +134,7 @@
            alt="V-JEPA-BEV teaser: frozen V-JEPA features lifted into a shared BEV representation feeding four task heads."
            style="width: 100%; height: auto;">
       <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
-        <span class="dnerf">V-JEPA-BEV</span> replaces the trained image backbone in BEV perception with a <em>frozen</em> self-supervised video encoder, producing a shared BEV representation that lifts four downstream tasks at once.
+        <span class="dnerf">V-JEPA-BEV</span> asks a simple question: for multi-task BEV perception, does temporal video understanding (V-JEPA 2.1) help more than strong spatial understanding (DINOv3) when the backbone is <em>frozen</em>?
       </h2>
     </div>
   </div>
@@ -161,13 +152,13 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Bird's-Eye-View (BEV) is the dominant scene representation in autonomous driving, providing a unified top-down framework for detection, segmentation, tracking, and planning from a single shared feature map. Its quality is bottlenecked by conventional image backbones that process frames in isolation, discarding temporal context and producing spatially inconsistent features.
+            Bird's-Eye-View (BEV) is the dominant scene representation in autonomous driving, providing a unified top-down framework for detection, segmentation, tracking, and planning from a single shared feature map. Its quality is fundamentally bottlenecked by the image backbone — but it has been unclear what <em>kind</em> of backbone matters most: one that understands video dynamics, or one with strong static spatial grounding.
           </p>
           <p>
-            We propose <strong>V-JEPA-BEV</strong>, replacing the conventional backbone with a frozen V-JEPA 2.1 video encoder whose dense, temporally consistent features are learned from video without labels. A lightweight adapter and cross-attention module lift the resulting per-camera tokens into a shared BEV feature map, which feeds four task heads simultaneously: 3D object detection, HD map segmentation, instance tracking, and trajectory prediction. We additionally introduce an ego-consistency auxiliary loss that adds no inference cost.
+            We propose <strong>V-JEPA-BEV</strong>: a BEV pipeline driven by a frozen self-supervised backbone, paired with a multi-scale convolutional adapter (gated residual blocks across feature scales) and BEVFormer's deformable cross-attention. We compare two frozen backbones head-to-head under a matched-compute setup — V-JEPA 2.1, which excels at <em>temporal</em> consistency, and DINOv3, which excels at <em>spatial</em> grounding — across four downstream tasks: 3D object detection, HD map segmentation, instance tracking, and ego-trajectory prediction.
           </p>
           <p>
-            On nuScenes, V-JEPA-BEV improves [NDS by X.X% / mAP by X.X% / mIoU by X.X% / AMOTA by X.X% / ADE by X.X m] over a matched-compute BEVFormer baseline, with simultaneous gains across all four tasks — evidence that frozen video self-supervision provides a genuinely better shared BEV representation rather than trading one task off against another.
+            On nuScenes, our best variant matches or improves on the matched-compute BEVFormer baseline across [TODO: which metrics], with simultaneous gains across multiple tasks. The headline finding, however, is comparative: <strong>spatial understanding in the encoder appears to matter more than temporal understanding</strong> for the BEV-projection problem. Encoding dynamics in the backbone is less useful than we expected, suggesting that dynamics should be handled downstream rather than baked into the image encoder.
           </p>
         </div>
       </div>
@@ -243,13 +234,22 @@
               The quality of this representation is fundamentally bottlenecked by the image backbone. BEVFormer v2 observes that BEV supervision provides only an indirect gradient to the backbone — the task loss travels backward through multiple transformer layers before reaching backbone weights, giving insufficient signal for a general 2D backbone to learn 3D scene properties. The resulting BEV features are spatially noisy, temporally inconsistent, and biased toward whichever downstream task dominates the loss, degrading every task that shares the representation.
             </p>
             <p>
-              Because the BEV feature map is shared across all tasks, a weak backbone hurts everything simultaneously, which makes fixing the backbone a higher-leverage intervention than improving any individual task head. Existing solutions either require expensive depth pre-training or an auxiliary perspective detection head, adding significant complexity. We ask a simple question:
-            </p>
-            <p style="text-align: center; font-style: italic;">
-              Can a frozen self-supervised video backbone, requiring no task-specific pre-training, provide the spatial grounding and temporal consistency needed for high-quality multi-task BEV perception?
+              Because the BEV feature map is shared across all tasks, a weak backbone hurts everything simultaneously, which makes fixing the backbone a higher-leverage intervention than improving any individual task head. Existing solutions either require expensive depth pre-training or an auxiliary perspective detection head, adding significant complexity. We instead ask whether a strong <em>frozen</em> self-supervised backbone is sufficient — and, more interestingly, what <em>kind</em> of pre-training matters.
             </p>
             <p>
-              Our answer is V-JEPA-BEV, a pipeline that pairs a frozen V-JEPA 2.1 video encoder with a lightweight trainable BEV transformer and four task heads. We make three contributions: (i) a V-JEPA-driven BEV pipeline with an adapter and temporal gate that absorbs the resolution mismatch between V-JEPA's coarse patch grid and standard BEV features, (ii) an ego-consistency auxiliary loss that exploits known ego pose to regularise the trainable layers without adding inference cost, and (iii) a simultaneous evaluation across detection, segmentation, tracking, and trajectory prediction — the joint improvement is our evidence that the representation is genuinely better rather than re-weighted.
+              Driving is a deeply dynamic setting: ego motion, other agents, occlusions, and lighting all change frame to frame. It is tempting to assume that a backbone that understands video dynamics should beat one trained only on still images. Yann LeCun has made the broader case explicitly:
+            </p>
+            <blockquote style="margin: 1rem 2rem; padding-left: 1rem; border-left: 3px solid #ccc; font-style: italic;">
+              "A 17-year-old can learn to drive in 20 hours. Why can't we train an AI to do that? Because we are missing something big: World Models. A teenager understands the consequences of their actions in the real world."
+            </blockquote>
+            <p>
+              This motivates our central question:
+            </p>
+            <p style="text-align: center; font-style: italic;">
+              Does a backbone that understands <em>temporal</em> dynamics (V-JEPA 2.1) help BEV perception more than one with stronger <em>spatial</em> grounding (DINOv3), when both are frozen?
+            </p>
+            <p>
+              To answer it we build V-JEPA-BEV: a BEV pipeline with a frozen image backbone, a multi-scale convolutional adapter (with gated residual blocks bridging different feature scales), and the standard BEVFormer transformer with deformable cross-attention and temporal self-attention. We swap the backbone (V-JEPA 2.1 vs DINOv3) and train identical downstream stacks on four nuScenes tasks. Our contributions are: (i) a careful matched-compute backbone comparison isolating temporal vs spatial pre-training for BEV, (ii) a multi-scale adapter that absorbs the resolution mismatch between modern ViT backbones and standard BEVFormer features, and (iii) a simultaneous evaluation across detection, segmentation, tracking, and trajectory prediction.
             </p>
           </div>
         </div>
@@ -283,9 +283,15 @@
               BEVDiffuser takes the orthogonal approach of leaving the backbone alone and refining the BEV features themselves with a training-time diffusion denoiser conditioned on ground-truth object layouts, reporting +12.3% mAP on detection. Their refiner is discarded at inference. We adopt this teacher–student framing for our stretch goal but replace diffusion with flow matching, and extend the evaluation from detection-only to all four tasks.
             </p>
 
-            <h3 class="title is-4">Self-supervised video representations</h3>
+            <h3 class="title is-4">Self-supervised representations: temporal and spatial</h3>
             <p>
-              V-JEPA 2.1 learns dense, temporally consistent patch features from internet video without labels, using a context-prediction objective in feature space. The 2.1 release reports 47.9 mIoU on ADE20K semantic segmentation under linear probing (vs. 22.2 for V-JEPA 1.0), strong evidence that the encoder learns spatially meaningful features rather than only sequence-level summaries. To our knowledge, V-JEPA 2.1 has not been applied to multi-camera BEV perception. Our work combines this frozen video backbone with lightweight auxiliary supervision and a multi-task evaluation protocol.
+              <strong>V-JEPA 2.1</strong> learns dense, temporally consistent patch features from internet video without labels, using a context-prediction objective in feature space. The 2.1 release reports 47.9 mIoU on ADE20K semantic segmentation under linear probing (vs. 22.2 for V-JEPA 1.0), evidence that the encoder learns spatially meaningful features rather than only sequence-level summaries. Its core asset for our setting is temporal consistency: features for the same physical content stay stable across consecutive frames of a clip.
+            </p>
+            <p>
+              <strong>DINOv3</strong> is the natural counterpart on the image-SSL side: a frozen ViT trained on a large image corpus with a self-distillation objective that produces unusually clean dense patch features. DINOv3 carries no temporal signal but provides extremely strong spatial grounding — the property that BEVFormer v2's perspective head was added to recover. The two backbones therefore put our research question — temporal vs spatial — in a single controlled comparison, with all other components (adapter, BEV transformer, task heads, training schedule) held fixed.
+            </p>
+            <p>
+              To our knowledge, neither backbone has been applied to multi-camera BEV perception in a controlled head-to-head, and the conclusion of that comparison is the main empirical contribution of this work.
             </p>
 
           </div>
@@ -307,7 +313,7 @@
           <h3 class="title is-4">3.1 Pipeline overview</h3>
           <div class="content has-text-justified">
             <p>
-              Figure 1 summarises the full pipeline. Six surround-camera views are encoded independently by a <em>frozen</em> V-JEPA 2.1 ViT-B encoder, producing a temporally extended per-camera token grid. A lightweight adapter projects these tokens into the BEV transformer's working dimension; an optional token-wise temporal gate fuses V-JEPA temporal slices. The BEV transformer then lifts the multi-view tokens into a shared BEV feature map $X^{\mathrm{BEV}} \in \mathbb{R}^{H \times W \times C}$ using deformable spatial cross-attention and BEVFormer-style temporal self-attention. Four task heads read from this shared feature map: 3D object detection, HD map segmentation, per-agent motion prediction, and ego-trajectory prediction. Training adds an ego-consistency auxiliary loss with no inference cost.
+              Figure 1 summarises the full pipeline. Six surround-camera views are encoded independently by a <em>frozen</em> ViT backbone — either V-JEPA 2.1 (temporal) or DINOv3 (spatial). A multi-scale convolutional adapter projects the resulting tokens into the BEV transformer's working dimension while bridging the backbone's coarse patch grid to multiple finer feature scales. The BEV transformer then lifts these multi-scale, multi-view tokens into a shared BEV feature map $X^{\mathrm{BEV}} \in \mathbb{R}^{H \times W \times C}$ using deformable spatial cross-attention and BEVFormer-style temporal self-attention. Four task heads read from this shared feature map: 3D object detection, HD map segmentation, per-agent motion prediction, and ego-trajectory prediction.
             </p>
           </div>
 
@@ -320,7 +326,7 @@
                 <h5 class="subtitle has-text-centered">
                   <font size="-0.7">
                     <span style="font-weight:normal">
-                      <strong>Figure 1.</strong> The V-JEPA-BEV pipeline. Frozen V-JEPA 2.1 encodes each camera; a trainable adapter and temporal gate convert cached features into BEVFormer-style image features; the BEV transformer fuses them into a shared BEV map; four task heads read from the same map. The ego-consistency loss (training only) regularises the trainable layers via known ego pose.
+                      <strong>Figure 1.</strong> The V-JEPA-BEV pipeline. A frozen ViT-B backbone (V-JEPA 2.1 or DINOv3) encodes each camera; a multi-scale convolutional adapter with gated residual blocks bridges backbone tokens to BEVFormer-style feature maps; the BEV transformer fuses them into a shared BEV map via deformable spatial cross-attention (8 / 12 / 16 sampling points across three scales) and temporal self-attention; four task heads read from the same map.
                     </span>
                   </font>
                 </h5>
@@ -328,27 +334,33 @@
             </div>
           </div>
 
-          <h3 class="title is-4">3.2 Frozen V-JEPA 2.1 backbone</h3>
+          <h3 class="title is-4">3.2 Frozen backbones: V-JEPA 2.1 and DINOv3</h3>
           <div class="content has-text-justified">
             <p>
-              We use V-JEPA 2.1 ViT-B as our image-feature extractor and freeze it entirely throughout training. Each camera view is passed through the encoder as a short clip; the encoder produces $T$ temporal slices of $14 \times 24$ patch tokens at $d_v = 768$ channels per slice, giving a cached tensor of shape $[B, 6, T \cdot 14 \cdot 24, d_v]$. Freezing the backbone has three motivations:
+              We compare two frozen ViT backbones. <strong>V-JEPA 2.1 ViT-B</strong> ingests a short clip per camera and produces $T$ temporal slices of $14 \times 24$ patch tokens at $d_v = 768$, giving a cached tensor of shape $[B, 6, T \cdot 14 \cdot 24, d_v]$. Its strength is temporal consistency of dense patch features. <strong>DINOv3 ViT-B</strong> ingests a single frame per camera and produces a denser patch grid of the same channel width, with the opposite trade-off: no native temporal signal but markedly stronger spatial grounding.
             </p>
             <p>
-              <em>Scientific.</em> The point of the project is to test whether off-the-shelf video SSL features are sufficient — fine-tuning would conflate "good SSL representation" with "well-adapted fine-tuned representation".
+              In both cases we keep the backbone <em>frozen</em> end-to-end. Freezing has three motivations:
+            </p>
+            <p>
+              <em>Scientific.</em> The point of the project is to test whether off-the-shelf SSL features are sufficient, and whether temporal or spatial pre-training matters more. Fine-tuning would conflate "good SSL representation" with "well-adapted fine-tuned representation" and would also entangle the two backbones with the optimizer's gradient flow.
               <br/>
-              <em>Computational.</em> A frozen backbone lets us precompute and cache V-JEPA features once per scene and reuse them across all training runs and ablations, turning the per-run cost into BEV-transformer training time.
+              <em>Computational.</em> A frozen backbone lets us precompute and cache features once per scene and reuse them across all training runs and ablations, turning the per-run cost into BEV-transformer training time.
               <br/>
               <em>Methodological.</em> Frozen features that already work are stronger evidence of representation quality than features that are coerced into working by gradient flow.
             </p>
           </div>
 
-          <h3 class="title is-4">3.3 Adapter and temporal fusion</h3>
+          <h3 class="title is-4">3.3 Multi-scale convolutional adapter</h3>
           <div class="content has-text-justified">
             <p>
-              V-JEPA tokens live at a coarser resolution (14×24 per camera, $d_v = 768$) than BEVFormer expects (256-dim feature maps). We bridge this with a residual convolutional adapter operating on the V-JEPA spatial grid: a 768 → 512 → 256 stem followed by four residual 3×3 conv blocks, each zero-initialised so the adapter starts close to identity. There is no final non-linearity — BEVFormer's attention layers expect signed features.
+              Both backbones produce tokens at a much coarser spatial resolution than BEVFormer's deformable cross-attention expects, and the input image resolutions we use (896×1600 full, downsampled to 25%, 17.6%, and ~6% of input area at successive scales) need to map cleanly onto a multi-scale feature pyramid. We bridge this with a multi-scale convolutional adapter.
             </p>
             <p>
-              To exploit V-JEPA's multiple temporal slices we compare three reduction strategies: <em>last</em> takes only the most recent slice, <em>mean</em> averages across slices, and <em>gated</em> applies a token-wise sigmoid gate $G = \sigma(f([F_{\text{curr}}, F_{\text{prev}}, F_{\text{curr}} - F_{\text{prev}}]))$ that predicts a per-token fusion weight between current and previous slices, producing $\text{fused} = (1 - G)\,F_{\text{curr}} + G\,F_{\text{prev}}$. The gated variant lets the model attend more heavily to the previous slice for occluded regions while preferring the current slice for fast-moving regions. We compare all three in Section IV.
+              The adapter has a shared <strong>linear adapter</strong> that projects the backbone's ViT-B channels (768) down to BEVFormer's working dimension (256), followed by a small pyramid of convolutional refinement blocks at successively finer spatial scales. Each scale applies a stack of plain Conv + Residual blocks, plus a <strong>gated convolutional block</strong> that interpolates between the scale's own features and the upsampled features from the previous scale, with a learned sigmoid gate selecting which to trust per token. The pyramid produces feature maps at multiple resolutions, which the BEV transformer's spatial cross-attention then samples from with progressively more sampling points (Section 3.4).
+            </p>
+            <p>
+              The adapter is the only place where the two backbones differ at the architecture level — V-JEPA features are first temporally reduced (last-slice, mean, or token-wise gated fusion of the current and previous V-JEPA slices) before entering the adapter; DINOv3 features are single-frame and skip this step. Everything downstream is identical, which lets the table-level comparison cleanly isolate the choice of backbone.
             </p>
           </div>
 
@@ -361,7 +373,10 @@
               <strong>Spatial cross-attention</strong> projects each BEV query's 3D pillar into every camera via known intrinsics and extrinsics, producing a small set of reference points per query–camera pair. <em>Deformable</em> attention then refines around each reference point: a linear layer on the query predicts $H \times L \times P$ sampling offsets and matching attention weights, and bilinear sampling fetches values at those offset locations. This keeps spatial cross-attention $O(N_{\text{query}} \cdot H \cdot P)$ rather than $O(N_{\text{query}} \cdot N_{\text{tokens}})$, and crucially seeds the layer with a geometrically valid starting point rather than asking it to discover 3D-to-2D correspondences from scratch.
             </p>
             <p>
-              <strong>Temporal self-attention</strong> fuses the current BEV queries with the previous frame's BEV feature map warped into the current ego frame via known pose. Dynamic objects are intentionally not warped — the layer learns to integrate their inconsistent positions into a motion-aware representation. V-JEPA's temporal slices and BEVFormer's BEV-level temporal fusion are complementary: the former gives temporally consistent image features within a clip, the latter propagates BEV-level state across BEVFormer frames.
+              We use the multi-scale feature pyramid from the adapter (Section 3.3) and allocate <strong>8, 12, and 16 sampling points per query</strong> at the three pyramid scales respectively, giving more samples on the finer-resolution maps where local image detail matters most. This is tuned for the matched 224×384 / 386×656 / 448×800 BEV-projection setup we use in the main experiments.
+            </p>
+            <p>
+              <strong>Temporal self-attention</strong> fuses the current BEV queries with the previous frame's BEV feature map warped into the current ego frame via known pose. Dynamic objects are intentionally not warped — the layer learns to integrate their inconsistent positions into a motion-aware representation. Crucially, this is a BEV-level temporal mechanism: it propagates state across BEVFormer frames regardless of which backbone was used. Our best variant ("V-JEPA-BEV with temporal attention") includes both V-JEPA's intra-clip temporal fusion (in the adapter) and BEVFormer's inter-frame temporal self-attention.
             </p>
           </div>
 
@@ -381,27 +396,13 @@
             </p>
           </div>
 
-          <h3 class="title is-4">3.6 Ego-consistency auxiliary loss</h3>
+          <h3 class="title is-4">3.6 Matched-compute training setup</h3>
           <div class="content has-text-justified">
             <p>
-              The trainable layers downstream of the frozen backbone — adapter, BEV transformer, task heads — can still drift to produce temporally inconsistent BEV maps even when the backbone is itself stable. To regularise these layers without any inference cost, we add an <em>ego-consistency loss</em>: for consecutive frames $t-1$ and $t$ with ego transform $T_{t-1 \to t}$, the previous BEV map warped into the current frame should match the current BEV map at static scene cells.
+              The headline comparison between V-JEPA-BEV and DINOv3-BEV is meaningful only if the two pipelines are matched on everything but the backbone. We use identical adapter architecture, identical BEV transformer hyperparameters (number of layers, BEV resolution, embedding dimension, sampling-point counts), identical task heads, identical loss weights, identical optimiser and schedule, and the same number of training epochs. The two backbones are both ViT-B, share the same hidden dimension ($d = 768$), and are both fully frozen. The only architectural difference is that V-JEPA features pass through an additional temporal-fusion step (last / mean / gated) before the adapter, since they arrive as multiple temporal slices; DINOv3 features are single-frame and skip this step.
             </p>
             <p>
-              \[
-                \mathcal{L}_{\text{ego}}
-                = \frac{1}{|\mathcal{M}_{\text{static}}|}
-                  \left\| \mathcal{M}_{\text{static}} \odot \Big( \mathrm{warp}\big(X^{\mathrm{BEV}}_{t-1},\, T_{t-1 \to t}\big) - X^{\mathrm{BEV}}_t \Big) \right\|^2
-              \]
-            </p>
-            <p>
-              $\mathcal{M}_{\text{static}}$ is constructed from GT 3D-box footprints rasterised onto the BEV grid (plus a small margin) and then inverted — dynamic regions are excluded because ego-pose warping does not capture their motion. Cells with no valid source after warping are also excluded. The loss is added with a small weight to the joint multi-task objective and is purely a training-time term.
-            </p>
-          </div>
-
-          <h3 class="title is-4">3.7 Stretch goal: flow-matching refinement teacher</h3>
-          <div class="content has-text-justified">
-            <p>
-              Following the teacher–student pattern of BEVDiffuser, we explore a flow-matching refinement module as a stretch goal. A DiT operating on BEV tokens, conditioned on GT object layouts, is trained in <em>Phase 1</em> jointly with the task heads to map imperfect BEV features $X^{\mathrm{BEV}}$ toward a cleaner, layout-consistent target $\hat{X}^{\mathrm{BEV}}$. In <em>Phase 2</em>, the refiner is frozen and used as a teacher: a fresh fusion head is trained with a BEV alignment loss $\| \hat{X}^{\mathrm{BEV}} - X^{\mathrm{BEV}} \|^2$ added to the task losses, and the refiner is discarded at inference. We choose flow matching over diffusion for faster sampling and a simpler training objective; we follow BEVDiffuser's input and conditioning recipe and contribute only the multi-task evaluation protocol.
+              This setup means any observed performance gap reflects the backbone's pre-training objective — temporal video SSL vs. spatial image SSL — rather than a confounded mix of architecture, supervision, and tuning differences. That property is what makes the takeaway in Section 5 interpretable.
             </p>
           </div>
 
@@ -431,7 +432,7 @@
           <h3 class="title is-4">4.2 Main quantitative results</h3>
           <div class="content has-text-justified">
             <p>
-              Table 1 reports our headline numbers. We compare four V-JEPA-BEV variants against the matched-compute BEVFormer-tiny baseline, with BEVFormer v2 and BEVDiffuser included as published reference points. <strong>Row A</strong> uses V-JEPA as the only intervention and isolates the backbone's contribution. <strong>Row B</strong> adds the ego-consistency loss to isolate that auxiliary term's contribution. <strong>Row C</strong> turns on all four task heads to test whether the representation supports simultaneous multi-task improvement. <strong>Row D</strong> (stretch) adds the flow-matching teacher.
+              Table 1 reports our headline numbers. The core comparison is between two frozen backbones with identical adapter, BEV transformer, task heads, and training schedule. <strong>BEVFormer-tiny (ResNet)</strong> is the matched-compute baseline. <strong>DINOv3-BEV</strong> isolates spatial pre-training. <strong>V-JEPA-BEV (last slice)</strong> isolates V-JEPA's static features. <strong>V-JEPA-BEV (gated temporal)</strong> adds V-JEPA's intra-clip temporal fusion. <strong>V-JEPA-BEV + Temporal Attn</strong> is our best variant, combining gated V-JEPA temporal fusion with BEVFormer's BEV-level temporal self-attention.
             </p>
             <div class="table-container">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -439,8 +440,8 @@
                   <tr>
                     <th>Method</th>
                     <th>Backbone</th>
-                    <th>Aux. supervision</th>
-                    <th>Tasks</th>
+                    <th>Pre-training</th>
+                    <th>Temporal fusion</th>
                     <th>mAP &uarr;</th>
                     <th>NDS &uarr;</th>
                     <th>mIoU &uarr;</th>
@@ -452,8 +453,8 @@
                   <tr>
                     <td>BEVFormer-tiny</td>
                     <td>ResNet</td>
-                    <td>&mdash;</td>
-                    <td>Det</td>
+                    <td>Supervised (ImageNet)</td>
+                    <td>BEVFormer Temp-SA</td>
                     <td>[X.XX]</td>
                     <td>[X.XX]</td>
                     <td>&mdash;</td>
@@ -461,54 +462,10 @@
                     <td>&mdash;</td>
                   </tr>
                   <tr>
-                    <td>BEVFormer v2</td>
-                    <td>InternImage</td>
-                    <td>Perspective head</td>
-                    <td>Det</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                  </tr>
-                  <tr>
-                    <td>BEVDiffuser</td>
-                    <td>ResNet</td>
-                    <td>Diffusion teacher</td>
-                    <td>Det</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Ours A</strong></td>
-                    <td>V-JEPA ViT-B</td>
-                    <td>&mdash;</td>
-                    <td>Det + Seg</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Ours B</strong></td>
-                    <td>V-JEPA ViT-B</td>
-                    <td>Ego-consistency</td>
-                    <td>Det + Seg</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>[X.XX]</td>
-                    <td>&mdash;</td>
-                    <td>&mdash;</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Ours C</strong></td>
-                    <td>V-JEPA ViT-B</td>
-                    <td>Ego-consistency</td>
-                    <td>All 4</td>
+                    <td><strong>DINOv3-BEV</strong></td>
+                    <td>DINOv3 ViT-B</td>
+                    <td>SSL (image, spatial)</td>
+                    <td>BEVFormer Temp-SA</td>
                     <td>[X.XX]</td>
                     <td>[X.XX]</td>
                     <td>[X.XX]</td>
@@ -516,10 +473,32 @@
                     <td>[X.XX]</td>
                   </tr>
                   <tr>
-                    <td><strong>Ours D</strong> <em>(stretch)</em></td>
-                    <td>V-JEPA ViT-B</td>
-                    <td>+ FM refiner</td>
-                    <td>All 4</td>
+                    <td><strong>V-JEPA-BEV</strong> <em>(last slice)</em></td>
+                    <td>V-JEPA 2.1 ViT-B</td>
+                    <td>SSL (video, temporal)</td>
+                    <td>None</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                  <tr>
+                    <td><strong>V-JEPA-BEV</strong> <em>(gated)</em></td>
+                    <td>V-JEPA 2.1 ViT-B</td>
+                    <td>SSL (video, temporal)</td>
+                    <td>V-JEPA gated</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                    <td>[X.XX]</td>
+                  </tr>
+                  <tr>
+                    <td><strong>V-JEPA-BEV + Temp-SA</strong> <em>(our best)</em></td>
+                    <td>V-JEPA 2.1 ViT-B</td>
+                    <td>SSL (video, temporal)</td>
+                    <td>V-JEPA gated + BEV Temp-SA</td>
                     <td>[X.XX]</td>
                     <td>[X.XX]</td>
                     <td>[X.XX]</td>
@@ -533,14 +512,14 @@
               <em>Table 1. Quantitative comparison on the nuScenes validation split. Higher is better for mAP, NDS, mIoU, AMOTA; lower is better for ADE. Numbers to be filled in.</em>
             </p>
             <p style="margin-top: 1rem;">
-              <strong>Headline observations.</strong> [TODO: e.g. "Row A improves NDS by +X.X over BEVFormer-tiny, isolating the backbone's contribution. Row B adds another +X.X NDS at no inference cost. Row C achieves simultaneous improvements on all four metrics, confirming that the shared representation supports multi-task perception rather than re-weighting a fixed budget across tasks."]
+              <strong>Headline observations.</strong> [TODO: fill in once final numbers settle, e.g. "DINOv3-BEV outperforms V-JEPA-BEV (last slice) by +X.X NDS, suggesting that spatial pre-training contributes more than temporal pre-training to the BEV-projection problem. Adding V-JEPA's gated temporal fusion closes part of the gap (+X.X NDS), and adding BEVFormer's BEV-level temporal self-attention on top recovers the remaining temporal benefit, producing our best variant. The takeaway is that temporal information helps, but it is better captured at the BEV level than at the image-feature level."]
             </p>
           </div>
 
           <h3 class="title is-4">4.3 Ablation: V-JEPA temporal fusion</h3>
           <div class="content has-text-justified">
             <p>
-              We compare the three V-JEPA temporal-slice reduction strategies (Section 3.3) on the multi-task setting (Row C). Table 2 isolates the effect of temporal fusion at the V-JEPA-feature level, holding the BEV transformer's own temporal self-attention fixed.
+              We compare the three V-JEPA temporal-slice reduction strategies (Section 3.3) on the multi-task setting. Table 2 isolates the effect of temporal fusion at the V-JEPA-feature level, holding the BEV transformer's own temporal self-attention fixed.
             </p>
             <div class="table-container">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -583,7 +562,7 @@
               </table>
             </div>
             <p style="margin-top: 0.5rem;">
-              <em>Table 2. Temporal-fusion ablation on Row C (all four tasks). Numbers to be filled in.</em>
+              <em>Table 2. Temporal-fusion ablation, holding everything else fixed to our best V-JEPA-BEV configuration. Numbers to be filled in.</em>
             </p>
             <p>
               [TODO: short commentary, e.g. "Gated fusion outperforms last-slice and mean by +X.X and +X.X NDS respectively, consistent with the hypothesis that per-token fusion better handles partially occluded regions where the previous slice is more informative."]
@@ -593,30 +572,51 @@
           <h3 class="title is-4">4.4 Qualitative results</h3>
           <div class="content has-text-justified">
             <p>
-              Figure 2 shows qualitative outputs from the four task heads on a held-out nuScenes scene. The same shared BEV feature map drives all four predictions; visually consistent agent extents, lane geometry, and predicted trajectories across frames are indirect evidence of the backbone's temporal consistency.
+              Figure 2 compares V-JEPA-BEV and BEVFormer on a held-out nuScenes scene. Both models receive the same six surround-camera inputs and predict 3D bounding boxes overlaid on the BEV plane. [TODO: short commentary, e.g. "V-JEPA-BEV produces tighter boxes on distant agents and recovers occluded objects more reliably; BEVFormer occasionally loses agents at the camera seams."]
             </p>
           </div>
           <div class="columns is-centered is-multiline">
             <div class="column is-half">
               <div class="content">
-                <h4 class="title is-5">Detection + tracking</h4>
+                <h4 class="title is-5">V-JEPA-BEV</h4>
                 <p>
-                  Predicted 3D boxes (cyan) and instance IDs over a [TODO: short scene description]. Note the temporal continuity of IDs across the frames.
+                  Detection output from V-JEPA-BEV (our best variant) on a [TODO: short scene description].
                 </p>
-                <video id="qual-det" autoplay controls muted loop playsinline width="100%">
-                  <source src="./static/videos/qual_detection.mp4" type="video/mp4">
+                <video id="qual-vjepa" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/qual_vjepa.mp4" type="video/mp4">
                 </video>
               </div>
             </div>
             <div class="column is-half">
               <div class="content">
-                <h4 class="title is-5">HD map segmentation + ego trajectory</h4>
+                <h4 class="title is-5">BEVFormer baseline</h4>
                 <p>
-                  Predicted drivable area, lane dividers, and pedestrian crossings overlaid with the predicted ego trajectory (red) and ground-truth ego trajectory (green).
+                  Detection output from BEVFormer-tiny on the same scene.
                 </p>
-                <video id="qual-seg" autoplay controls muted loop playsinline width="100%">
-                  <source src="./static/videos/qual_segmentation.mp4" type="video/mp4">
+                <video id="qual-bev" autoplay controls muted loop playsinline width="100%">
+                  <source src="./static/videos/qual_bevformer.mp4" type="video/mp4">
                 </video>
+              </div>
+            </div>
+          </div>
+
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              Figure 3 shows the multi-task output of V-JEPA-BEV on the same scene — 3D detection overlaid with HD map segmentation (drivable area, walkway, lane dividers) and the predicted ego trajectory. All four task heads read from the same shared BEV feature map, which is why their predictions remain spatially consistent with one another frame to frame.
+            </p>
+          </div>
+          <div class="columns is-centered">
+            <div class="column is-three-quarters">
+              <div align="center" class="box">
+                <img src="./static/images/multitask.png"
+                  alt="V-JEPA-BEV multi-task output: detection, HD map segmentation, and ego trajectory on a single nuScenes scene.">
+                <h5 class="subtitle has-text-centered">
+                  <font size="-0.7">
+                    <span style="font-weight:normal">
+                      <strong>Figure 3.</strong> Multi-task output of V-JEPA-BEV. Detection (3D boxes), HD map segmentation (drivable area, walkway, lane dividers, pedestrian crossings), and ego trajectory are produced from a single shared BEV feature map.
+                    </span>
+                  </font>
+                </h5>
               </div>
             </div>
           </div>
@@ -661,32 +661,42 @@
         <div class="column is-full-width">
           <h2 class="title is-3" id="conclusion">V. Conclusion and Limitations</h2>
 
-          <h3 class="title is-4">5.1 Implications</h3>
+          <h3 class="title is-4">5.1 Key takeaway: spatial > temporal in the encoder</h3>
           <div class="content has-text-justified">
             <p>
-              V-JEPA-BEV tests whether a frozen self-supervised video backbone can substitute for task-supervised backbones in safety-critical perception without inference overhead. Our results [TODO: confirm / partially confirm] this. The implication for BEV system design is that backbone adaptation may not require either expensive depth pre-training or auxiliary perspective heads — a sufficiently strong, frozen video representation closes the same gap. The implication for self-supervised learning is that the dense-feature gains reported on 2D semantic segmentation transfer to multi-task 3D scene perception, suggesting further gains as video SSL backbones continue to scale.
+              We set out to test whether a frozen <em>video</em> backbone — V-JEPA 2.1 — would beat a frozen <em>image</em> backbone — DINOv3 — for multi-task BEV perception, on the intuition that driving is dynamic and a backbone that understands video should win. Our experiments suggest the opposite. <strong>Temporal understanding in the encoder is not as important as spatial understanding.</strong> DINOv3's stronger spatial grounding translates more directly into the BEV-projection task; V-JEPA's temporal consistency does help, but the gain is recovered almost as well by adding a single temporal self-attention layer at the BEV level rather than baking dynamics into the backbone.
+            </p>
+            <p>
+              We read this as a comment on where the bottleneck of BEV perception actually sits: lifting six 2D camera views into a single 3D BEV grid is a fundamentally <em>spatial</em> task. Backbones that produce cleaner per-pixel patch features make this lifting easier; backbones that produce temporally consistent but spatially coarser features do not. Dynamics in driving may be better encoded directly downstream — at the BEV level, in the tracker, or in a dedicated representation such as a driving tokenizer ("DriveTok") — rather than inside the image encoder itself.
             </p>
           </div>
 
           <h3 class="title is-4">5.2 Limitations</h3>
           <div class="content has-text-justified">
             <p>
-              <strong>Domain gap.</strong> V-JEPA 2.1 is pre-trained on general internet video, not driving footage. Some of the gap we observe between Row A and BEVFormer-tiny on [TODO: which metric] may reflect this; a driving-specific video SSL backbone would likely close it further.
+              <strong>Domain gap.</strong> Neither V-JEPA 2.1 nor DINOv3 is pre-trained on driving footage. Some of the gap we observe relative to BEVFormer-tiny on [TODO: which metric] may reflect this; a driving-specific SSL backbone would likely close it further on both sides.
               <br/>
-              <strong>Multi-task interactions.</strong> Although Row C improves on Rows A–B, individual task losses do compete during training. We mitigate this by adding tasks incrementally and tuning per-head loss weights manually; a principled multi-task balancing scheme is left to future work.
+              <strong>Frozen-only regime.</strong> We deliberately restrict to frozen backbones to isolate representation quality from backbone adaptation. BEV projection is, however, genuinely hard, and partial fine-tuning of the backbone is a plausible way to recover the remaining gap — we leave that to future work.
+              <br/>
+              <strong>Multi-task interactions.</strong> Individual task losses compete during training. We mitigate this by adding tasks incrementally and tuning per-head loss weights manually; a principled multi-task balancing scheme is left to future work.
               <br/>
               <strong>Single dataset.</strong> Our evaluation is limited to nuScenes. Cross-dataset transfer to Waymo or Argoverse would test how much of the gain is dataset-specific.
               <br/>
               <strong>Compute.</strong> Training on 4×V100 fits the project budget but constrains the ablation surface. A larger backbone (ViT-L), additional auxiliary losses, or extended hyperparameter sweeps would require more compute than this setup supports.
-              <br/>
-              <strong>Negative result handling.</strong> If Row A does not improve over BEVFormer-tiny, this is itself a meaningful empirical finding about the transferability of off-the-shelf video SSL to BEV perception, and we report it as such rather than as a failed experiment.
             </p>
           </div>
 
           <h3 class="title is-4">5.3 Future work</h3>
           <div class="content has-text-justified">
             <p>
-              Three directions follow naturally. First, scaling the backbone to ViT-L or larger and quantifying the slope of gains with backbone size. Second, pre-training V-JEPA on a mixture of internet video and driving footage to close the residual domain gap. Third, replacing the GT-conditioned flow-matching refiner with a self-supervised alternative — for example a refiner conditioned on detected (rather than ground-truth) layouts — which would remove the only training-time dependence on labels in our auxiliary objectives.
+              Three directions follow naturally from the takeaway above.
+            </p>
+            <p>
+              <strong>Push frozen further, then start fine-tuning.</strong> Our results suggest frozen SSL backbones are promising for BEV perception. The natural next step is partial fine-tuning of the last few backbone blocks — BEV projection is a difficult 3D-spatial task that may benefit from a small amount of backbone adaptation while still preserving the SSL representation.
+              <br/>
+              <strong>Encode dynamics downstream, not in the encoder.</strong> Given that temporal pre-training is less useful than spatial pre-training in the encoder, the natural place to inject dynamics is downstream — either at the BEV level (richer temporal attention, recurrence, or trajectory queries) or in a separate driving-token representation that the BEV map can consult.
+              <br/>
+              <strong>Auxiliary signals for a generalist AV model.</strong> A BEV map alone may not be enough for a generalist autonomous-driving system. Auxiliary signals derived from the encoder but adjacent to BEV — depth, optical flow, scene classification, semantic segmentation — could complement the shared BEV representation without forcing every task through it.
             </p>
           </div>
 
