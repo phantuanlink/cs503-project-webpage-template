@@ -142,6 +142,29 @@
 
 <!------------------------------------------------------------------------->
 
+<section class="section" style="padding-bottom: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div align="center" class="box wide-figure">
+          <img src="./static/gifs/vjepa_scene481_thr035_preview.gif"
+            alt="V-JEPA-BEV qualitative preview on a nuScenes scene."
+            style="width: 100%; height: auto;">
+          <h5 class="subtitle has-text-centered">
+            <font size="-0.7">
+              <span style="font-weight:normal">
+                Qualitative preview of V-JEPA-BEV predictions on a held-out nuScenes scene.
+              </span>
+            </font>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!------------------------------------------------------------------------->
+
 <!--TODO: ABSTRACT OF THE PROJECT -->
 
 <section class="section">
@@ -168,7 +191,7 @@
 <!--TODO: LIST OF ITEMS IN THE WEBSITE -->
 
 <div class="columns is-centered has-text-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
 
           <h2 class="title is-3">Overview</h2>
           <div class="tile is-ancestor is-centered" style="vertical-align: middle;">
@@ -232,7 +255,7 @@
     <div class="container is-max-desktop">
       <!-- Introduction. -->
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="intro">I. Introduction</h2>
           <div class="content has-text-justified">
             <p>
@@ -281,7 +304,7 @@
     <div class="container is-max-desktop">
       <!-- Related Works. -->
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="related-work">II. Related Works</h2>
           <div class="content has-text-justified">
 
@@ -289,6 +312,21 @@
             <p>
               <strong>BEVFormer</strong> [1] lifts per-view image features into a shared BEV feature map through deformable spatial cross-attention with learnable BEV queries and refines across time with a temporal self-attention layer, reaching 51.7% NDS on nuScenes with an R101-DCN backbone. <strong>BEVFormer v2</strong> [4] shows that adding a perspective 3D supervision head lets modern ViT backbones match or exceed ResNet variants by giving the backbone a more direct 2D gradient signal. <strong>Lift-Splat-Shoot</strong> [5] and BEVDepth take a complementary route, predicting per-pixel depth explicitly before splatting. <strong>BEVFusion</strong> [6] extends the BEV grid to combine camera and LiDAR streams. We retain BEVFormer's transformer skeleton unchanged and intervene only at the backbone and adapter.
             </p>
+
+            <div class="columns is-centered is-multiline">
+              <div class="column is-full">
+                <div class="content has-text-centered">
+                  <img src="./static/gifs/bevfusion.gif" alt="BEVFusion related-work overview." style="width: 100%; height: auto;">
+                  <p><strong>BEVFusion.</strong> Multi-sensor fusion directly in the BEV space.</p>
+                </div>
+              </div>
+              <div class="column is-full">
+                <div class="content has-text-centered">
+                  <img src="./static/gifs/lifesplat.gif" alt="Lift-Splat-style related-work overview." style="width: 100%; height: auto;">
+                  <p><strong>Lift-Splat-style methods.</strong> Explicit depth lifting followed by BEV splatting.</p>
+                </div>
+              </div>
+            </div>
 
             <h3 class="title is-4">Visual foundation models</h3>
             <p>
@@ -313,7 +351,7 @@
     <div class="container is-max-desktop">
       <!-- Methodology. -->
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="method">III. Methodology</h2>
 
           <h3 class="title is-4">3.1 Pipeline overview</h3>
@@ -326,8 +364,8 @@
           <!-- Architecture figure -->
           <div class="columns is-centered">
             <div class="column is-three-quarters">
-              <div align="center" class="box">
-                <img src="./static/images/architecture.png"
+              <div align="center" class="box wide-figure">
+                <img src="./static/images/pipeline.png"
                   alt="V-JEPA-BEV pipeline: frozen V-JEPA encoder, adapter and temporal gate, BEV transformer with deformable spatial cross-attention and temporal self-attention, four task heads.">
                 <h5 class="subtitle has-text-centered">
                   <font size="-0.7">
@@ -442,7 +480,7 @@
     <div class="container is-max-desktop">
       <!-- Results. -->
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="results">IV. Results</h2>
 
           <h3 class="title is-4">4.1 Experimental setup</h3>
@@ -453,6 +491,28 @@
             <p>
               Both V-JEPA 2.1 and DINOv3 features are pre-extracted into H5 caches across all six cameras before training begins. This decouples adapter and BEV-transformer iteration from backbone forward passes, both at training time (fast experimentation) and inference time (the source of the 2.3× latency advantage in Section 4.3).
             </p>
+          </div>
+
+          <div class="box interactive-panel wide-figure" id="video-comparison">
+            <h4 class="title is-5">Qualitative video comparison</h4>
+            <div class="buttons are-small is-centered">
+              <button class="button is-dark is-rounded video-toggle-button is-active" data-video="dino">DINOv3</button>
+              <button class="button is-rounded video-toggle-button" data-video="vjepa">V-JEPA</button>
+            </div>
+            <div class="video-pane" data-video-pane="dino">
+              <video id="dino-video" class="toggle-video" muted playsinline preload="auto" width="100%">
+                <source src="./static/videos/dino.mp4" type="video/mp4">
+              </video>
+              <input id="dino-video-slider" class="video-frame-slider" type="range" min="0" max="0" value="0" step="0.033" data-video-target="dino-video">
+              <p class="has-text-centered is-size-7">DINOv3 qualitative output. Drag the slider to scrub frame by frame.</p>
+            </div>
+            <div class="video-pane is-hidden-view" data-video-pane="vjepa">
+              <video id="vjepa-video" class="toggle-video" muted playsinline preload="auto" width="100%">
+                <source src="./static/videos/vjepa.mp4" type="video/mp4">
+              </video>
+              <input id="vjepa-video-slider" class="video-frame-slider" type="range" min="0" max="0" value="0" step="0.033" data-video-target="vjepa-video">
+              <p class="has-text-centered is-size-7">V-JEPA qualitative output. Drag the slider to scrub frame by frame.</p>
+            </div>
           </div>
 
           <h3 class="title is-4">4.2 Ablation summary</h3>
@@ -578,6 +638,54 @@
             </p>
           </div>
 
+          <div class="box interactive-panel" id="ablation-explorer">
+            <h4 class="title is-5">Interactive ablation explorer</h4>
+            <div class="buttons are-small">
+              <button class="button is-dark is-rounded ablation-button is-active" data-config="vjepa-best">V-JEPA best</button>
+              <button class="button is-rounded ablation-button" data-config="dino-best">DINOv3 best</button>
+              <button class="button is-rounded ablation-button" data-config="dino-no-temporal">DINOv3 no temporal</button>
+              <button class="button is-rounded ablation-button" data-config="multitask-det-track-ego">Det + track + ego</button>
+              <button class="button is-rounded ablation-button" data-config="multitask-seg">Det + segmentation</button>
+            </div>
+            <div class="columns is-multiline has-text-centered">
+              <div class="column is-one-quarter-desktop is-half-tablet">
+                <p class="heading">NDS</p>
+                <p class="title is-4" id="ablation-nds">0.431</p>
+              </div>
+              <div class="column is-one-quarter-desktop is-half-tablet">
+                <p class="heading">Latency</p>
+                <p class="title is-4" id="ablation-latency">~230 ms</p>
+              </div>
+              <div class="column is-one-quarter-desktop is-half-tablet">
+                <p class="heading">mAVE</p>
+                <p class="title is-4" id="ablation-mave">TODO</p>
+              </div>
+              <div class="column is-one-quarter-desktop is-half-tablet">
+                <p class="heading">Takeaway</p>
+                <p id="ablation-tagline">Best V-JEPA configuration after adapter, resolution, and BEV temporal attention improvements.</p>
+              </div>
+            </div>
+            <progress class="progress is-info" id="ablation-progress" value="83.5" max="100">83.5%</progress>
+            <p class="has-text-centered is-size-7" id="ablation-progress-caption">83.5% of the BEVFormer reference NDS at 43% of its latency.</p>
+          </div>
+
+          <div class="columns is-centered">
+            <div class="column is-three-quarters">
+              <div align="center" class="box wide-figure">
+                <img src="./static/images/result_graph.png"
+                  alt="Ablation result graph showing NDS and latency trade-offs across V-JEPA-BEV and DINOv3 variants."
+                  style="width: 100%; height: auto;">
+                <h5 class="subtitle has-text-centered">
+                  <font size="-0.7">
+                    <span style="font-weight:normal">
+                      <strong>Figure 2.</strong> Summary of the staged ablation and the resulting quality-latency frontier.
+                    </span>
+                  </font>
+                </h5>
+              </div>
+            </div>
+          </div>
+
           <h3 class="title is-4">4.3 Latency advantage</h3>
           <div class="content has-text-justified">
             <p>
@@ -607,6 +715,28 @@
             </p>
           </div>
 
+          <div class="box interactive-panel wide-figure" id="bev-map-comparison">
+            <h4 class="title is-5">BEV map comparison</h4>
+            <div class="buttons are-small is-centered">
+              <button class="button is-dark is-rounded bev-map-button is-active" data-map="dino">DINOv3 vs BEVFormer</button>
+              <button class="button is-rounded bev-map-button" data-map="vjepa">V-JEPA vs BEVFormer</button>
+            </div>
+            <div class="columns is-centered is-multiline">
+              <div class="column is-half">
+                <div class="content has-text-centered">
+                  <img id="bev-map-model-image" src="./static/images/bevmap_dino_compare.png" alt="DINOv3 BEV map qualitative output." style="width: 100%; height: auto;">
+                  <p id="bev-map-model-caption"><strong>DINOv3.</strong> BEV map prediction with spatially pretrained frozen features.</p>
+                </div>
+              </div>
+              <div class="column is-half">
+                <div class="content has-text-centered">
+                  <img id="bev-map-bevformer-image" src="./static/images/bevmap_bevformer_dino_compare.png" alt="BEVFormer BEV map qualitative output." style="width: 100%; height: auto;">
+                  <p id="bev-map-bevformer-caption"><strong>BEVFormer.</strong> Baseline BEV map prediction on the same DINOv3 comparison scene.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <h3 class="title is-4">4.5 Multi-task learning analysis</h3>
           <div class="content has-text-justified">
             <p>
@@ -624,6 +754,52 @@
               <strong>Implication.</strong> Map segmentation and 3D detection demand <em>different inductive biases</em> in the BEV representation, and naively sharing a single BEV feature map across both introduces a bias conflict. Future work should explore task-specific BEV decoders, gradient surgery [9], or uncertainty-weighted loss balancing to resolve the tension. Task count alone is not the bottleneck; <em>task compatibility</em> is.
             </p>
           </div>
+
+          <div class="box interactive-panel wide-figure">
+            <h4 class="title is-5">Interactive multi-task output</h4>
+            <div class="buttons are-small is-centered">
+              <button class="button is-dark is-rounded multitask-button is-active" data-view="both">Side by side</button>
+              <button class="button is-rounded multitask-button" data-view="detection">Detection + ego</button>
+              <button class="button is-rounded multitask-button" data-view="segmentation">Segmentation</button>
+            </div>
+            <div class="columns is-centered is-vcentered" id="multitask-outputs">
+              <div class="column is-half multitask-pane" data-pane="detection">
+                <div align="center" class="box">
+                  <img src="./static/images/instance_ego_detection.png"
+                    alt="Multi-task V-JEPA-BEV output with instance detection and ego trajectory prediction."
+                    style="width: 100%; height: auto;">
+                  <h5 class="subtitle has-text-centered">
+                    <font size="-0.7">
+                      <span style="font-weight:normal">
+                        <strong>Detection + ego trajectory.</strong> Instance-level detection with ego-trajectory prediction.
+                      </span>
+                    </font>
+                  </h5>
+                </div>
+              </div>
+              <div class="column is-half multitask-pane" data-pane="segmentation">
+                <div align="center" class="box">
+                  <img src="./static/images/segmentation.png"
+                    alt="V-JEPA-BEV HD map segmentation output."
+                    style="width: 100%; height: auto;">
+                  <h5 class="subtitle has-text-centered">
+                    <font size="-0.7">
+                      <span style="font-weight:normal">
+                        <strong>Map segmentation.</strong> HD map segmentation from the shared BEV representation.
+                      </span>
+                    </font>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h5 class="subtitle has-text-centered">
+            <font size="-0.7">
+              <span style="font-weight:normal">
+                <strong>Figure 3.</strong> Multi-task outputs from the shared BEV representation shown side by side.
+              </span>
+            </font>
+          </h5>
 
           <h3 class="title is-4">4.6 Qualitative results</h3>
           <div class="content has-text-justified">
@@ -714,7 +890,7 @@
     <div class="container is-max-desktop">
       <!-- Conclusion and Limitations. -->
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="conclusion">V. Conclusion and Limitations</h2>
 
           <h3 class="title is-4">5.1 Three findings</h3>
@@ -775,7 +951,7 @@
   <section class="section">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
-        <div class="column is-full-width">
+        <div class="column is-four-fifths">
           <h2 class="title is-3" id="references">References</h2>
           <div class="content">
             <p style="font-size: 0.95rem;">
